@@ -25,8 +25,6 @@ export function HomeScreen() {
           description="Quick-fire questions on React, JavaScript, TypeScript, and CSS. Good for warming up or filling gaps."
           icon="⚡"
           onClick={() => navigate('/quiz')}
-          badge="Coming soon"
-          disabled
         />
         <ModeCard
           title="Component Practice"

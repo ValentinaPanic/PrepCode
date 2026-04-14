@@ -4,6 +4,7 @@ import cors from 'cors'
 import chatRouter from './routes/chat'
 import sessionsRouter from './routes/sessions'
 import challengesRouter from './routes/challenges'
+import quizRouter from './routes/quiz'
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -21,6 +22,7 @@ app.get('/health', (_req, res) => {
 app.use('/api/chat', chatRouter)
 app.use('/api/sessions', sessionsRouter)
 app.use('/api/challenges', challengesRouter)
+app.use('/api/quiz', quizRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)

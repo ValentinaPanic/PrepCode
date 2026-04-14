@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { HomeScreen } from './screens/HomeScreen'
 import { SystemDesign } from './modes/SystemDesign'
+import { Quiz } from './modes/Quiz'
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomeScreen />} />
           <Route path="/system-design" element={<SystemDesign />} />
+          <Route path="/quiz" element={<Quiz />} />
         </Routes>
       </BrowserRouter>
     </div>
