@@ -1,10 +1,12 @@
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useClaude } from '../hooks/useClaude'
 import { ChatWindow } from '../components/ChatWindow'
 import { InputBar } from '../components/InputBar'
 import { systemDesignPrompt } from '../prompts/systemDesign'
 
 export function SystemDesign() {
+  const navigate = useNavigate()
   const { messages, isLoading, error, sendMessage, reset } = useClaude(
     systemDesignPrompt,
     'system_design'
@@ -19,9 +21,18 @@ export function SystemDesign() {
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
-        <div>
-          <h1 className="text-white font-semibold">System Design</h1>
-          <p className="text-zinc-500 text-xs mt-0.5">API contracts · Architecture · Scalability</p>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => navigate('/')}
+            className="text-zinc-500 hover:text-zinc-300 transition-colors"
+            aria-label="Back to home"
+          >
+            ←
+          </button>
+          <div>
+            <h1 className="text-white font-semibold">System Design</h1>
+            <p className="text-zinc-500 text-xs mt-0.5">API contracts · Architecture · Scalability</p>
+          </div>
         </div>
         <button
           onClick={reset}
