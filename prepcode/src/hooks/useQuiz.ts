@@ -120,25 +120,35 @@ export function useQuiz() {
         }),
       })
 
-      if (!res.ok || !res.body) throw new Error('Failed to get explanation')
+      if (!res.ok) throw new Error('Failed to get explanation')
 
-      // Stream the explanation in word by word
-      const reader = res.body.getReader()
-      const decoder = new TextDecoder()
       let explanation = ''
+      const contentType = res.headers.get('content-type') || ''
 
-      while (true) {
-        const { done, value } = await reader.read()
-        if (done) break
+      if (contentType.includes('application/json')) {
+        // Fallback path: static explanation from DB question, no streaming
+        const data = await res.json()
+        explanation = data.explanation
+      } else {
+        // Claude path: stream the explanation word by word
+        if (!res.body) throw new Error('No response body')
 
-        explanation += decoder.decode(value, { stream: true })
+        const reader = res.body.getReader()
+        const decoder = new TextDecoder()
 
-        setState(prev => ({
-          ...prev,
-          currentAttempt: prev.currentAttempt
-            ? { ...prev.currentAttempt, claudeExplanation: explanation }
-            : prev.currentAttempt,
-        }))
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+
+          explanation += decoder.decode(value, { stream: true })
+
+          setState(prev => ({
+            ...prev,
+            currentAttempt: prev.currentAttempt
+              ? { ...prev.currentAttempt, claudeExplanation: explanation }
+              : prev.currentAttempt,
+          }))
+        }
       }
 
       // Save the completed attempt to the DB

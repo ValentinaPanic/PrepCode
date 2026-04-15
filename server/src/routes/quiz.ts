@@ -5,6 +5,22 @@ import { quizQuestionPrompt, quizEvaluationPrompt } from '../prompts/quiz'
 
 const router = Router()
 
+function hasApiKey(req: Request): boolean {
+  return !!(req.headers['x-api-key'] || process.env.ANTHROPIC_API_KEY)
+}
+
+function mapRowToQuestion(row: Record<string, unknown>) {
+  return {
+    format: row.format,
+    topic: row.topic,
+    difficulty: row.difficulty,
+    question: row.question,
+    options: row.options ?? null,
+    correctAnswer: row.correct_answer,
+    explanation: row.explanation,
+  }
+}
+
 // POST /api/quiz/question
 // Returns a single QuizQuestion as JSON (not streamed)
 router.post('/question', async (req: Request, res: Response) => {
@@ -15,6 +31,28 @@ router.post('/question', async (req: Request, res: Response) => {
     return
   }
 
+  // ── Fallback: pull from DB when no API key is available ──────────────────
+  if (!hasApiKey(req)) {
+    const { data, error } = await supabase
+      .from('quiz_questions')
+      .select('*')
+      .eq('topic', topic)
+      .eq('difficulty', difficulty)
+
+    if (error || !data || data.length === 0) {
+      res.status(404).json({ error: 'No questions available for this topic and difficulty' })
+      return
+    }
+
+    const unseen = data.filter((q: Record<string, unknown>) => !previousQuestions.includes(q.question))
+    const pool = unseen.length > 0 ? unseen : data
+    const row = pool[Math.floor(Math.random() * pool.length)]
+
+    res.json(mapRowToQuestion(row))
+    return
+  }
+
+  // ── Claude path ──────────────────────────────────────────────────────────
   const avoidClause =
     previousQuestions.length > 0
       ? `\n\nDo not repeat any of these questions:\n- ${previousQuestions.join('\n- ')}`
@@ -54,7 +92,7 @@ router.post('/question', async (req: Request, res: Response) => {
 })
 
 // POST /api/quiz/evaluate
-// Streams a personalised explanation back to the client
+// Streams a personalised explanation, or returns JSON if no API key
 router.post('/evaluate', async (req: Request, res: Response) => {
   const { question, userAnswer, sessionId } = req.body
 
@@ -63,6 +101,13 @@ router.post('/evaluate', async (req: Request, res: Response) => {
     return
   }
 
+  // ── Fallback: return the static explanation from the question ────────────
+  if (!hasApiKey(req)) {
+    res.json({ explanation: question.explanation })
+    return
+  }
+
+  // ── Claude path: stream personalised explanation ─────────────────────────
   const userContent = [
     `Question: ${question.question}`,
     `Correct answer: ${question.correctAnswer}`,
@@ -96,7 +141,6 @@ router.post('/evaluate', async (req: Request, res: Response) => {
       }
     }
 
-    // Save the explanation to the session if we have one
     if (sessionId) {
       await supabase.from('messages').insert({
         session_id: sessionId,
