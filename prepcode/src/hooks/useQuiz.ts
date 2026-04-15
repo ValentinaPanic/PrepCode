@@ -21,7 +21,7 @@ export function useQuiz() {
 
   // ─── Session creation ───────────────────────────────────────────────────────
 
-  async function createSession(topic: QuizTopic, difficulty: string): Promise<string> {
+  async function createSession(topic: QuizTopic): Promise<string> {
     const res = await fetch(`${API_URL}/api/sessions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -77,7 +77,7 @@ export function useQuiz() {
     previousQuestions.current = []
 
     try {
-      sessionId.current = await createSession(topic, difficulty)
+      sessionId.current = await createSession(topic)
     } catch {
       // Session creation failing shouldn't block the quiz
       console.warn('Could not create session in DB')
@@ -89,7 +89,7 @@ export function useQuiz() {
   // ─── Submit answer ──────────────────────────────────────────────────────────
 
   const submitAnswer = useCallback(async (userAnswer: string) => {
-    const { currentQuestion, topic, difficulty } = state
+    const { currentQuestion, topic } = state
     if (!currentQuestion || !topic) return
 
     const isCorrect =
