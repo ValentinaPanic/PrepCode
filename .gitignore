@@ -5,6 +5,7 @@ node_modules/
 .envrc
 .env
 .env.*
+!.env.example
 
 # Build output
 dist/
