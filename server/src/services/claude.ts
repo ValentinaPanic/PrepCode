@@ -1,9 +1,11 @@
 import Anthropic from '@anthropic-ai/sdk'
 
-const apiKey = process.env.ANTHROPIC_API_KEY
+export function getAnthropicClient(userApiKey?: string): Anthropic {
+  const key = userApiKey || process.env.ANTHROPIC_API_KEY
 
-if (!apiKey) {
-  throw new Error('Missing ANTHROPIC_API_KEY in .env')
+  if (!key) {
+    throw new Error('No Anthropic API key available')
+  }
+
+  return new Anthropic({ apiKey: key })
 }
-
-export const anthropic = new Anthropic({ apiKey })

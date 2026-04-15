@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express'
-import { anthropic } from '../services/claude'
+import { getAnthropicClient } from '../services/claude'
 import { supabase } from '../services/supabase'
 import { quizQuestionPrompt, quizEvaluationPrompt } from '../prompts/quiz'
 
@@ -21,6 +21,8 @@ router.post('/question', async (req: Request, res: Response) => {
       : ''
 
   try {
+    const anthropic = getAnthropicClient(req.headers['x-api-key'] as string | undefined)
+
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 512,
@@ -73,6 +75,8 @@ router.post('/evaluate', async (req: Request, res: Response) => {
   res.setHeader('Connection', 'keep-alive')
 
   try {
+    const anthropic = getAnthropicClient(req.headers['x-api-key'] as string | undefined)
+
     const stream = anthropic.messages.stream({
       model: 'claude-sonnet-4-6',
       max_tokens: 300,
