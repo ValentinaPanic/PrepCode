@@ -127,7 +127,7 @@ const questions = [
     explanation: 'Reconciliation is React\'s algorithm for comparing the previous and new virtual DOM trees to determine the minimal set of real DOM changes needed. This is what makes React updates efficient.',
   },
 
-  // ─── JavaScript ───────────────────────────────────────────────────────────
+  // ─── JavaScript ──────────────────────────────────────────────────────────
 
   {
     topic: 'javascript', difficulty: 'easy', format: 'multiple_choice',
@@ -240,7 +240,68 @@ const questions = [
     explanation: 'map passes three arguments to the callback: value, index, array. parseInt receives value and index as the radix. parseInt(1, 0) → 1, parseInt(2, 1) → NaN (radix 1 is invalid), parseInt(3, 2) → NaN (3 is not valid in base 2).',
   },
 
-  // ─── TypeScript ───────────────────────────────────────────────────────────
+  {
+    topic: 'javascript', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What is the difference between var, let, and const?',
+    options: [
+      { label: 'A', text: 'They are all identical — just different style conventions' },
+      { label: 'B', text: 'var is function-scoped and hoisted; let and const are block-scoped; const cannot be reassigned' },
+      { label: 'C', text: 'const makes an object fully immutable including its nested properties' },
+      { label: 'D', text: 'let is only available in TypeScript, not plain JavaScript' },
+    ],
+    correct_answer: 'B',
+    explanation: 'var is hoisted and function-scoped — it leaks out of if/for blocks. let and const are block-scoped and safer. const prevents reassignment of the binding, but does not freeze the object — its properties can still be mutated.',
+  },
+  {
+    topic: 'javascript', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What does the spread operator (...) do when used with an array?',
+    options: [
+      { label: 'A', text: 'It merges two arrays by reference' },
+      { label: 'B', text: 'It expands the array elements into individual values' },
+      { label: 'C', text: 'It removes duplicate values from the array' },
+      { label: 'D', text: 'It converts an array to a Set' },
+    ],
+    correct_answer: 'B',
+    explanation: '[...arr1, ...arr2] creates a new array with all elements from both arrays. [...obj] copies an object\'s own enumerable properties. The spread operator always creates a shallow copy — nested objects are still shared by reference.',
+  },
+  {
+    topic: 'javascript', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What does the optional chaining operator (?.) do?',
+    options: [
+      { label: 'A', text: 'It makes a property optional in a TypeScript interface' },
+      { label: 'B', text: 'It accesses a property and returns undefined instead of throwing if the value is null or undefined' },
+      { label: 'C', text: 'It provides a default value when a property is undefined' },
+      { label: 'D', text: 'It checks if a method exists before calling it and throws if it does not' },
+    ],
+    correct_answer: 'B',
+    explanation: 'user?.address?.city returns undefined if user or address is null/undefined, instead of throwing "Cannot read property of undefined". Combine with the nullish coalescing operator: user?.name ?? "Guest" to provide a fallback.',
+  },
+  {
+    topic: 'javascript', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What does the nullish coalescing operator (??) do?',
+    options: [
+      { label: 'A', text: 'It is identical to the || operator' },
+      { label: 'B', text: 'It returns the right-hand side only when the left is null or undefined — not for other falsy values' },
+      { label: 'C', text: 'It converts null to undefined for consistency' },
+      { label: 'D', text: 'It throws an error if the value is null' },
+    ],
+    correct_answer: 'B',
+    explanation: 'value ?? "default" returns "default" only if value is null or undefined. Unlike ||, it does not treat 0, "", or false as fallback triggers. This makes ?? safer when 0 or an empty string are valid values.',
+  },
+  {
+    topic: 'javascript', difficulty: 'hard', format: 'multiple_choice',
+    question: 'What is a generator function?',
+    options: [
+      { label: 'A', text: 'A function that automatically generates TypeScript types' },
+      { label: 'B', text: 'A function that can pause execution and resume later, yielding values one at a time' },
+      { label: 'C', text: 'A factory function that creates multiple objects of the same shape' },
+      { label: 'D', text: 'A function that runs in a Web Worker thread' },
+    ],
+    correct_answer: 'B',
+    explanation: 'Generator functions use function* syntax and yield values one at a time. Each call to next() resumes execution until the next yield. They are useful for lazy sequences, infinite data, and are the foundation of async/await under the hood.',
+  },
+
+  // ─── TypeScript ──────────────────────────────────────────────────────────
 
   {
     topic: 'typescript', difficulty: 'easy', format: 'multiple_choice',
@@ -339,6 +400,123 @@ const questions = [
     options: null,
     correct_answer: 'Partial',
     explanation: 'Partial<User> produces a type where every property of User is optional. It is equivalent to manually adding ? to every field. Commonly used for update functions where you only pass the fields you want to change.',
+  },
+
+  {
+    topic: 'react', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What is the purpose of React.Fragment?',
+    options: [
+      { label: 'A', text: 'To create a portal that renders outside the DOM hierarchy' },
+      { label: 'B', text: 'To group multiple elements without adding an extra DOM node' },
+      { label: 'C', text: 'To memoize a component and prevent re-renders' },
+      { label: 'D', text: 'To split code into lazy-loaded chunks' },
+    ],
+    correct_answer: 'B',
+    explanation: 'React.Fragment (or the shorthand <>) lets you return multiple elements from a component without wrapping them in a div. This avoids polluting the DOM with unnecessary wrapper elements that can break layouts.',
+  },
+  {
+    topic: 'react', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What is prop drilling?',
+    options: [
+      { label: 'A', text: 'Passing props through many layers of components that do not need them, just to reach a deeply nested child' },
+      { label: 'B', text: 'Using the spread operator to pass all props at once' },
+      { label: 'C', text: 'Validating props with PropTypes' },
+      { label: 'D', text: 'Destructuring props at the top of a component' },
+    ],
+    correct_answer: 'A',
+    explanation: 'Prop drilling is when you pass data through intermediate components that have no use for it themselves — they just forward it down. Common solutions are React Context, a state manager like Redux/Zustand, or component composition.',
+  },
+  {
+    topic: 'react', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What is the difference between a controlled and an uncontrolled input?',
+    options: [
+      { label: 'A', text: 'Controlled inputs use refs; uncontrolled inputs use state' },
+      { label: 'B', text: 'Controlled inputs have their value driven by React state; uncontrolled inputs let the DOM manage their own value' },
+      { label: 'C', text: 'Uncontrolled inputs are disabled; controlled inputs are editable' },
+      { label: 'D', text: 'There is no practical difference in React' },
+    ],
+    correct_answer: 'B',
+    explanation: 'A controlled input has value={state} and onChange={setState} — React is the single source of truth. An uncontrolled input stores its own value in the DOM and you read it with a ref when needed. Controlled inputs are preferred because the value is always in sync with state.',
+  },
+  {
+    topic: 'react', difficulty: 'hard', format: 'multiple_choice',
+    question: 'What does React.StrictMode do in development?',
+    options: [
+      { label: 'A', text: 'It enforces TypeScript type checking at runtime' },
+      { label: 'B', text: 'It intentionally double-invokes certain functions to help detect side effects' },
+      { label: 'C', text: 'It prevents any state updates outside of event handlers' },
+      { label: 'D', text: 'It disables all console.log output' },
+    ],
+    correct_answer: 'B',
+    explanation: 'In development, StrictMode double-invokes render functions, state initialisers, and effect setup/cleanup to help you catch accidental side effects. It has no effect in production. This is why you might see effects run twice — it is intentional.',
+  },
+
+  {
+    topic: 'typescript', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What is an enum in TypeScript?',
+    options: [
+      { label: 'A', text: 'A way to define a list of named numeric or string constants' },
+      { label: 'B', text: 'A utility type that makes properties read-only' },
+      { label: 'C', text: 'A decorator for class properties' },
+      { label: 'D', text: 'A shorthand for defining a union of string literals' },
+    ],
+    correct_answer: 'A',
+    explanation: 'enum Direction { Up, Down, Left, Right } creates a named set of constants. By default they are numeric (Up = 0, Down = 1...). String enums (Up = "UP") are often preferred for readability. Many teams now prefer union types instead: type Direction = "Up" | "Down".',
+  },
+  {
+    topic: 'typescript', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What does the Readonly utility type do?',
+    options: [
+      { label: 'A', text: 'It deeply freezes all nested objects at runtime' },
+      { label: 'B', text: 'It makes all properties of a type read-only at the TypeScript level' },
+      { label: 'C', text: 'It prevents a variable from being reassigned' },
+      { label: 'D', text: 'It is equivalent to using const on every property' },
+    ],
+    correct_answer: 'B',
+    explanation: 'Readonly<User> makes every property on User assignable only at creation. TypeScript will error if you try to reassign user.name = "x". It is compile-time only — it does not call Object.freeze at runtime.',
+  },
+  {
+    topic: 'typescript', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What is the difference between a type assertion (as SomeType) and a type guard?',
+    options: [
+      { label: 'A', text: 'Type assertions are runtime checks; type guards are compile-time only' },
+      { label: 'B', text: 'Type assertions tell the compiler to trust you without checking; type guards actually verify the type at runtime' },
+      { label: 'C', text: 'They are identical — just different syntax styles' },
+      { label: 'D', text: 'Type guards only work with primitive types; assertions work with objects' },
+    ],
+    correct_answer: 'B',
+    explanation: 'value as SomeType is a compile-time instruction that bypasses type checking — it does not verify anything at runtime. A type guard (typeof, instanceof, or a custom is function) actually checks the value at runtime and narrows the type safely. Prefer type guards over assertions.',
+  },
+  {
+    topic: 'typescript', difficulty: 'hard', format: 'multiple_choice',
+    question: 'What is structural typing in TypeScript?',
+    options: [
+      { label: 'A', text: 'Types are compatible if they have the same name' },
+      { label: 'B', text: 'Types are compatible if an object has all the required properties, regardless of its declared type' },
+      { label: 'C', text: 'All types must be declared in a central types.ts file' },
+      { label: 'D', text: 'TypeScript enforces type compatibility at runtime' },
+    ],
+    correct_answer: 'B',
+    explanation: 'TypeScript uses structural (duck) typing. If an object has all the properties a type requires, it is assignable — regardless of what class or interface it was declared as. This is different from Java where types are checked by name (nominal typing).',
+  },
+  {
+    topic: 'typescript', difficulty: 'medium', format: 'short_answer',
+    question: 'What TypeScript utility type constructs a type by picking a set of properties from another type?',
+    options: null,
+    correct_answer: 'Pick',
+    explanation: 'Pick<User, "id" | "name"> creates a new type with only those two properties from User. The opposite is Omit<User, "password"> which creates a type with everything except the listed keys. Both are commonly used when passing partial shapes between layers of an app.',
+  },
+  {
+    topic: 'typescript', difficulty: 'hard', format: 'multiple_choice',
+    question: 'What does the Record<K, V> utility type do?',
+    options: [
+      { label: 'A', text: 'It records changes to an object over time' },
+      { label: 'B', text: 'It constructs an object type with keys of type K and values of type V' },
+      { label: 'C', text: 'It converts an array into a map' },
+      { label: 'D', text: 'It makes all values in an object the same type' },
+    ],
+    correct_answer: 'B',
+    explanation: 'Record<string, number> is equivalent to { [key: string]: number }. It is commonly used for lookup tables and maps: Record<UserId, User>. More expressive than an index signature when the key type is a known union.',
   },
 
   // ─── CSS ─────────────────────────────────────────────────────────────────
@@ -448,10 +626,77 @@ const questions = [
     correct_answer: 'CSS Grid',
     explanation: 'CSS Grid\'s grid-template-areas lets you define a visual map of your layout using named strings. Each cell in the grid can be assigned to a named area, and children use grid-area: name to place themselves. This makes complex layouts readable and maintainable.',
   },
+  {
+    topic: 'css', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What is the difference between position: relative and position: absolute?',
+    options: [
+      { label: 'A', text: 'relative removes the element from normal flow; absolute keeps it in flow' },
+      { label: 'B', text: 'relative offsets from its normal position and stays in flow; absolute is removed from flow and positioned relative to its nearest non-static ancestor' },
+      { label: 'C', text: 'absolute positions relative to the viewport; relative positions relative to the document' },
+      { label: 'D', text: 'They are identical except for the property name' },
+    ],
+    correct_answer: 'B',
+    explanation: 'position: relative keeps the element in the document flow but lets you offset it with top/left/right/bottom. position: absolute removes the element from flow entirely and positions it relative to its nearest positioned ancestor (one with position other than static).',
+  },
+  {
+    topic: 'css', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What is the difference between :hover and :focus pseudo-classes?',
+    options: [
+      { label: 'A', text: ':hover responds to mouse; :focus responds to keyboard navigation or explicit focus' },
+      { label: 'B', text: ':focus only works on form elements; :hover works on any element' },
+      { label: 'C', text: 'They are identical — both activate on mouse hover' },
+      { label: 'D', text: ':hover is CSS3; :focus is CSS2' },
+    ],
+    correct_answer: 'A',
+    explanation: ':hover activates when the mouse pointer is over an element. :focus activates when an element receives focus — via keyboard Tab, clicking an input, or programmatic focus. Always style :focus for accessibility — keyboard users depend on visible focus indicators.',
+  },
+  {
+    topic: 'css', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What is a CSS pseudo-element?',
+    options: [
+      { label: 'A', text: 'A class that is added dynamically with JavaScript' },
+      { label: 'B', text: 'A keyword added to a selector that lets you style a specific part of an element' },
+      { label: 'C', text: 'A placeholder selector used before the real CSS loads' },
+      { label: 'D', text: 'A selector that targets elements not yet in the DOM' },
+    ],
+    correct_answer: 'B',
+    explanation: 'Pseudo-elements (::before, ::after, ::first-line, ::placeholder) style a specific part of an element or insert generated content. They use double colons (::) to distinguish from pseudo-classes (:hover, :focus). ::before and ::after require a content property to render.',
+  },
+  {
+    topic: 'css', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What does object-fit do?',
+    options: [
+      { label: 'A', text: 'It controls how a flex item fits inside its container' },
+      { label: 'B', text: 'It controls how an image or video is resized to fit its container while preserving or ignoring its aspect ratio' },
+      { label: 'C', text: 'It aligns an object to the centre of the page' },
+      { label: 'D', text: 'It replaces background-size for inline images' },
+    ],
+    correct_answer: 'B',
+    explanation: 'object-fit is used on replaced elements (img, video). cover fills the container and may crop; contain fits inside without cropping; fill stretches to fill (distorts); none keeps the original size. Pair with object-position to control the focal point.',
+  },
+  {
+    topic: 'css', difficulty: 'hard', format: 'multiple_choice',
+    question: 'What is the CSS cascade?',
+    options: [
+      { label: 'A', text: 'The order in which CSS files are downloaded by the browser' },
+      { label: 'B', text: 'The algorithm that determines which CSS rule applies when multiple rules target the same element and property' },
+      { label: 'C', text: 'The inheritance of properties from parent to child elements' },
+      { label: 'D', text: 'The process of combining multiple stylesheets into one' },
+    ],
+    correct_answer: 'B',
+    explanation: 'The cascade resolves conflicts between competing rules. It considers: origin (browser default < author < inline), importance (!important), specificity (ID > class > element), and source order (later wins if equal). Understanding the cascade is essential to debugging unexpected style overrides.',
+  },
 ]
 
 async function seed() {
   console.log(`Seeding ${questions.length} questions...`)
+
+  // Clear existing questions first to avoid duplicates on re-run
+  const { error: deleteError } = await supabase.from('quiz_questions').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+  if (deleteError) {
+    console.error('Failed to clear existing questions:', deleteError.message)
+    process.exit(1)
+  }
 
   const { error } = await supabase.from('quiz_questions').insert(questions)
 
