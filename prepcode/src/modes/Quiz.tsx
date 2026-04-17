@@ -53,10 +53,23 @@ export function Quiz() {
         )}
 
         {phase === 'loading_question' && (
-          <div className="flex items-center justify-center flex-1 gap-2 text-zinc-500">
-            <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
-            <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
-            <span className="w-1.5 h-1.5 bg-zinc-500 rounded-full animate-bounce" />
+          <div className="flex flex-col gap-6 p-6 animate-pulse">
+            {/* Question text skeleton */}
+            <div className="space-y-2">
+              <div className="h-4 bg-zinc-800 rounded w-full" />
+              <div className="h-4 bg-zinc-800 rounded w-4/5" />
+              <div className="h-4 bg-zinc-800 rounded w-3/5" />
+            </div>
+
+            {/* Option skeletons */}
+            <div className="flex flex-col gap-2">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-zinc-800 bg-zinc-800/30">
+                  <div className="w-7 h-7 rounded-lg bg-zinc-700" />
+                  <div className="h-3.5 bg-zinc-700 rounded flex-1" style={{ width: `${50 + i * 10}%` }} />
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
