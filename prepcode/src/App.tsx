@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { HomeScreen } from './screens/HomeScreen'
 import { SystemDesign } from './modes/SystemDesign'
 import { Quiz } from './modes/Quiz'
+import { ComponentPractice } from './modes/ComponentPractice'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
           <Route path="/" element={<HomeScreen />} />
           <Route path="/system-design" element={<SystemDesign />} />
           <Route path="/quiz" element={<Quiz />} />
+          <Route path="/components" element={<ComponentPractice />} />
         </Routes>
       </BrowserRouter>
     </div>

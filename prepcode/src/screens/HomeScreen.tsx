@@ -31,8 +31,6 @@ export function HomeScreen() {
           description="Build accessible HTML components from scratch — button, form, input, nav, and more. Scored on correctness."
           icon="🧩"
           onClick={() => navigate('/components')}
-          badge="Coming soon"
-          disabled
         />
       </div>
     </div>
