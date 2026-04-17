@@ -43,17 +43,17 @@ export function SystemDesign() {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate('/')}
-            className="text-zinc-500 hover:text-zinc-300 transition-colors"
+            className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
             aria-label="Back to home"
           >
             ←
           </button>
           <div>
-            <h1 className="text-white font-semibold">System Design</h1>
+            <h1 className="text-zinc-900 dark:text-white font-semibold">System Design</h1>
             <p className="text-zinc-500 text-xs mt-0.5">API contracts · Architecture · Scalability</p>
           </div>
         </div>

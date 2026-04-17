@@ -25,10 +25,10 @@ export function InputBar({ onSend, isLoading, placeholder = 'Type a message...' 
   }
 
   return (
-    <div className="border-t border-zinc-800 px-4 py-4">
+    <div className="border-t border-zinc-200 dark:border-zinc-800 px-4 py-4">
       <div className="flex gap-3 items-end">
         <textarea
-          className="flex-1 bg-zinc-800 text-zinc-100 rounded-xl px-4 py-3 text-sm resize-none outline-none focus:ring-1 focus:ring-indigo-500 placeholder:text-zinc-500"
+          className="flex-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-xl px-4 py-3 text-sm resize-none outline-none focus:ring-1 focus:ring-indigo-500 placeholder:text-zinc-400 dark:placeholder:text-zinc-500"
           rows={1}
           value={value}
           onChange={e => setValue(e.target.value)}

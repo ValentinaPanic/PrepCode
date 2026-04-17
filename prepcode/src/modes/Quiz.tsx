@@ -1,5 +1,7 @@
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuiz } from '../hooks/useQuiz'
+import { useStats } from '../hooks/useStats'
 import { QuizScoreBar } from '../components/quiz/QuizScoreBar'
 import { QuizTopicSelector } from '../components/quiz/QuizTopicSelector'
 import { QuizQuestionCard } from '../components/quiz/QuizQuestionCard'
@@ -9,24 +11,43 @@ import { QuizSummary } from '../components/quiz/QuizSummary'
 export function Quiz() {
   const navigate = useNavigate()
   const { state, startSession, submitAnswer, nextQuestion, reset } = useQuiz()
+  const { saveQuizResult } = useStats()
   const { phase, currentQuestion, currentAttempt, score, total } = state
+  const savedRef = useRef(false)
+
+  // Save stats when a session completes
+  useEffect(() => {
+    if (phase === 'session_complete' && state.topic && !savedRef.current) {
+      savedRef.current = true
+      saveQuizResult({
+        topic: state.topic,
+        difficulty: state.difficulty,
+        score,
+        total,
+        date: new Date().toISOString(),
+      })
+    }
+    if (phase === 'idle') {
+      savedRef.current = false
+    }
+  }, [phase, state.topic, state.difficulty, score, total, saveQuizResult])
 
   const isAnswered = phase === 'loading_explanation' || phase === 'explanation_shown'
 
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-800">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate('/')}
-            className="text-zinc-500 hover:text-zinc-300 transition-colors"
+            className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
             aria-label="Back to home"
           >
             ←
           </button>
           <div>
-            <h1 className="text-white font-semibold">Quiz</h1>
+            <h1 className="text-zinc-900 dark:text-white font-semibold">Quiz</h1>
             <p className="text-zinc-500 text-xs mt-0.5">React · JavaScript · TypeScript · CSS</p>
           </div>
         </div>

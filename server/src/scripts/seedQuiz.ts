@@ -686,6 +686,367 @@ const questions = [
     correct_answer: 'B',
     explanation: 'The cascade resolves conflicts between competing rules. It considers: origin (browser default < author < inline), importance (!important), specificity (ID > class > element), and source order (later wins if equal). Understanding the cascade is essential to debugging unexpected style overrides.',
   },
+
+  // ─── React (batch 2) ──────────────────────────────────────────────────────
+
+  {
+    topic: 'react', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What is JSX?',
+    options: [
+      { label: 'A', text: 'A JavaScript runtime for executing React apps' },
+      { label: 'B', text: 'A syntax extension that lets you write HTML-like code inside JavaScript' },
+      { label: 'C', text: 'A CSS-in-JS library' },
+      { label: 'D', text: 'A testing framework for React components' },
+    ],
+    correct_answer: 'B',
+    explanation: 'JSX is syntactic sugar for React.createElement() calls. <div className="x"> compiles to React.createElement("div", { className: "x" }). Browsers cannot run JSX directly — a build tool like Vite or Babel transforms it to regular JavaScript.',
+  },
+  {
+    topic: 'react', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What is the correct way to conditionally render a component in React?',
+    options: [
+      { label: 'A', text: 'Using an if statement inside the return' },
+      { label: 'B', text: 'Using the && operator or a ternary expression inside JSX' },
+      { label: 'C', text: 'Using document.getElementById to show/hide it' },
+      { label: 'D', text: 'Using CSS display:none toggled by React' },
+    ],
+    correct_answer: 'B',
+    explanation: '{isLoggedIn && <Dashboard />} renders Dashboard only when isLoggedIn is true. The ternary {isLoggedIn ? <Dashboard /> : <Login />} handles both branches. You cannot use if/else directly inside JSX return — only expressions.',
+  },
+  {
+    topic: 'react', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What is the purpose of useContext?',
+    options: [
+      { label: 'A', text: 'To create a new React component' },
+      { label: 'B', text: 'To read a value from a Context without prop drilling' },
+      { label: 'C', text: 'To manage global CSS variables' },
+      { label: 'D', text: 'To access browser APIs like localStorage' },
+    ],
+    correct_answer: 'B',
+    explanation: 'useContext reads the nearest value provided by a Context.Provider higher in the tree. It solves prop drilling — instead of passing a value through 5 layers of components, any descendant can read it directly.',
+  },
+  {
+    topic: 'react', difficulty: 'medium', format: 'short_answer',
+    question: 'What function do you call to force a component to re-render with updated state in a class component?',
+    options: null,
+    correct_answer: 'setState',
+    explanation: 'this.setState() triggers a re-render in class components. In function components, the equivalent is the setter returned by useState. Direct mutation of this.state does NOT trigger a re-render.',
+  },
+  {
+    topic: 'react', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What is a custom hook?',
+    options: [
+      { label: 'A', text: 'A React component that starts with "use"' },
+      { label: 'B', text: 'A function that starts with "use" and can call other hooks to encapsulate reusable logic' },
+      { label: 'C', text: 'A built-in React hook that is not commonly used' },
+      { label: 'D', text: 'A hook that only works in class components' },
+    ],
+    correct_answer: 'B',
+    explanation: 'Custom hooks are regular functions prefixed with "use" that compose built-in hooks. They let you extract stateful logic out of components so it can be shared. Example: useLocalStorage, useFetch, useDebounce.',
+  },
+  {
+    topic: 'react', difficulty: 'hard', format: 'multiple_choice',
+    question: 'What is a React portal?',
+    options: [
+      { label: 'A', text: 'A way to render children into a DOM node that exists outside the parent component\'s DOM hierarchy' },
+      { label: 'B', text: 'A routing mechanism for navigating between pages' },
+      { label: 'C', text: 'A caching layer for component state' },
+      { label: 'D', text: 'A way to lazy-load components on demand' },
+    ],
+    correct_answer: 'A',
+    explanation: 'ReactDOM.createPortal(child, domNode) renders a component into a different DOM node while preserving the React event bubbling and context. Common use cases: modals, tooltips, and dropdown menus that need to visually "break out" of a parent with overflow: hidden.',
+  },
+  {
+    topic: 'react', difficulty: 'hard', format: 'multiple_choice',
+    question: 'What is the purpose of React.lazy and Suspense?',
+    options: [
+      { label: 'A', text: 'To delay rendering until data has been fetched from an API' },
+      { label: 'B', text: 'To code-split by dynamically importing components and showing a fallback while they load' },
+      { label: 'C', text: 'To throttle renders for performance' },
+      { label: 'D', text: 'To make components render lazily only when visible in the viewport' },
+    ],
+    correct_answer: 'B',
+    explanation: 'React.lazy(() => import("./HeavyComponent")) splits the bundle so HeavyComponent is only downloaded when needed. Suspense wraps it with a fallback UI shown during loading. This reduces the initial bundle size and speeds up first paint.',
+  },
+  {
+    topic: 'react', difficulty: 'hard', format: 'short_answer',
+    question: 'What React hook would you use to get a reference to a DOM element?',
+    options: null,
+    correct_answer: 'useRef',
+    explanation: 'useRef returns a mutable ref object whose .current property is initialized to the argument. Attach it to a JSX element via ref={myRef} and after render, myRef.current points to the DOM node. Unlike state, changing .current does not trigger a re-render.',
+  },
+
+  // ─── JavaScript (batch 2) ────────────────────────────────────────────────
+
+  {
+    topic: 'javascript', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What is the difference between null and undefined?',
+    options: [
+      { label: 'A', text: 'They are identical and can be used interchangeably' },
+      { label: 'B', text: 'undefined means a variable was declared but not assigned; null is an intentional assignment of "no value"' },
+      { label: 'C', text: 'null is for objects, undefined is for primitives' },
+      { label: 'D', text: 'undefined only exists in TypeScript, not JavaScript' },
+    ],
+    correct_answer: 'B',
+    explanation: 'undefined is the default value for uninitialized variables and missing function arguments. null is explicitly assigned to indicate "no value." typeof undefined is "undefined", typeof null is "object" (a historical bug).',
+  },
+  {
+    topic: 'javascript', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What does Array.prototype.filter do?',
+    options: [
+      { label: 'A', text: 'It modifies each element in the array' },
+      { label: 'B', text: 'It returns a new array containing only elements that pass a test function' },
+      { label: 'C', text: 'It removes duplicate elements from an array' },
+      { label: 'D', text: 'It sorts the array based on a callback' },
+    ],
+    correct_answer: 'B',
+    explanation: '[1,2,3,4].filter(n => n > 2) returns [3,4]. filter creates a new array — it does not mutate the original. The callback should return true to keep the element, false to exclude it.',
+  },
+  {
+    topic: 'javascript', difficulty: 'easy', format: 'short_answer',
+    question: 'What keyword do you use to define an asynchronous function in JavaScript?',
+    options: null,
+    correct_answer: 'async',
+    explanation: 'The async keyword before a function declaration makes it return a Promise. Inside an async function you can use await to pause execution until a Promise resolves. async/await is syntactic sugar over .then() chains.',
+  },
+  {
+    topic: 'javascript', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What is destructuring assignment?',
+    options: [
+      { label: 'A', text: 'Deleting properties from an object' },
+      { label: 'B', text: 'A syntax for extracting values from arrays or properties from objects into distinct variables' },
+      { label: 'C', text: 'Breaking a function into smaller functions' },
+      { label: 'D', text: 'Converting an object to JSON' },
+    ],
+    correct_answer: 'B',
+    explanation: 'const { name, age } = user extracts those properties into variables. const [first, second] = arr does the same for arrays. You can also set defaults: const { name = "Guest" } = user. Destructuring is used extensively in React for props and hook returns.',
+  },
+  {
+    topic: 'javascript', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What is the difference between map and forEach?',
+    options: [
+      { label: 'A', text: 'map mutates the original array; forEach does not' },
+      { label: 'B', text: 'map returns a new array with transformed values; forEach returns undefined' },
+      { label: 'C', text: 'forEach can break early; map always processes all elements' },
+      { label: 'D', text: 'They are identical — map is just the modern name' },
+    ],
+    correct_answer: 'B',
+    explanation: 'map transforms each element and collects results into a new array. forEach just runs a function for each element and returns nothing. Use map when you need the result (e.g., rendering a list in React), forEach when you just want the side effect.',
+  },
+  {
+    topic: 'javascript', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What does the this keyword refer to in an arrow function?',
+    options: [
+      { label: 'A', text: 'The object that called the function' },
+      { label: 'B', text: 'The global window object' },
+      { label: 'C', text: 'It inherits this from the surrounding lexical scope' },
+      { label: 'D', text: 'Arrow functions do not have access to this' },
+    ],
+    correct_answer: 'C',
+    explanation: 'Arrow functions do not have their own this binding — they capture this from the enclosing scope where they were defined. This is why arrow functions are preferred for callbacks and event handlers in React, where you want this to refer to the component.',
+  },
+  {
+    topic: 'javascript', difficulty: 'hard', format: 'multiple_choice',
+    question: 'What is the difference between a shallow copy and a deep copy?',
+    options: [
+      { label: 'A', text: 'Shallow copies only copy primitive values; deep copies also copy objects' },
+      { label: 'B', text: 'A shallow copy copies the top-level properties but nested objects are still shared by reference; a deep copy recursively copies everything' },
+      { label: 'C', text: 'Deep copies are faster because they use less memory' },
+      { label: 'D', text: 'There is no difference in JavaScript' },
+    ],
+    correct_answer: 'B',
+    explanation: 'const copy = { ...original } creates a shallow copy. If original.address is an object, copy.address points to the same object — mutating one affects the other. structuredClone(original) creates a true deep copy. This distinction is critical for immutable state updates in React.',
+  },
+  {
+    topic: 'javascript', difficulty: 'hard', format: 'short_answer',
+    question: 'What built-in JavaScript function creates a deep clone of an object?',
+    options: null,
+    correct_answer: 'structuredClone',
+    explanation: 'structuredClone() was added to the web platform to create true deep copies. Before it existed, developers used JSON.parse(JSON.stringify(obj)) which fails on functions, undefined, Date, Map, Set, and circular references. structuredClone handles all of these correctly.',
+  },
+
+  // ─── TypeScript (batch 2) ────────────────────────────────────────────────
+
+  {
+    topic: 'typescript', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What is the difference between any and unknown?',
+    options: [
+      { label: 'A', text: 'any allows all operations without checking; unknown requires a type check before use' },
+      { label: 'B', text: 'unknown is deprecated in favor of any' },
+      { label: 'C', text: 'any only works with primitives; unknown works with objects' },
+      { label: 'D', text: 'They are identical — just different names' },
+    ],
+    correct_answer: 'A',
+    explanation: 'any disables all type checking — you can call any method or access any property. unknown accepts any value but forces you to narrow the type before doing anything with it. Use unknown for values from external sources (API responses, user input) where you need safety.',
+  },
+  {
+    topic: 'typescript', difficulty: 'easy', format: 'short_answer',
+    question: 'What TypeScript keyword is used to define the shape of an object with named properties?',
+    options: null,
+    correct_answer: 'interface',
+    explanation: 'interface User { name: string; age: number } defines the shape. You can also use type for the same purpose. Interfaces support declaration merging (adding properties in multiple declarations) while types support unions and intersections more naturally.',
+  },
+  {
+    topic: 'typescript', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What does the Omit utility type do?',
+    options: [
+      { label: 'A', text: 'It removes a type from a union' },
+      { label: 'B', text: 'It creates a new type by excluding specified properties from another type' },
+      { label: 'C', text: 'It makes specified properties optional' },
+      { label: 'D', text: 'It omits null and undefined from a type' },
+    ],
+    correct_answer: 'B',
+    explanation: 'Omit<User, "password" | "secret"> creates a type with all of User\'s properties except password and secret. Useful when you need most of a type but want to exclude sensitive or irrelevant fields. The opposite is Pick, which keeps only the listed properties.',
+  },
+  {
+    topic: 'typescript', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What is type narrowing?',
+    options: [
+      { label: 'A', text: 'Converting a type to a narrower string representation' },
+      { label: 'B', text: 'Reducing the possible types of a value within a code block using runtime checks' },
+      { label: 'C', text: 'Removing unused types from the bundle' },
+      { label: 'D', text: 'Making a type more generic so it accepts fewer values' },
+    ],
+    correct_answer: 'B',
+    explanation: 'After if (typeof x === "string"), TypeScript knows x is a string inside that block. Other narrowing techniques: instanceof, in operator, truthiness checks, and discriminated unions. Narrowing is how you safely work with union types.',
+  },
+  {
+    topic: 'typescript', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What does the as const assertion do?',
+    options: [
+      { label: 'A', text: 'It makes a variable immutable at runtime like Object.freeze' },
+      { label: 'B', text: 'It infers the narrowest possible literal type instead of widening to string/number' },
+      { label: 'C', text: 'It converts a const to a let' },
+      { label: 'D', text: 'It asserts that a value is definitely not null' },
+    ],
+    correct_answer: 'B',
+    explanation: 'const x = "hello" as const gives x the type "hello" (literal) instead of string. For objects: const config = { port: 3000 } as const makes port readonly with type 3000, not number. Useful for creating enum-like constants and ensuring exact types in arrays.',
+  },
+  {
+    topic: 'typescript', difficulty: 'hard', format: 'multiple_choice',
+    question: 'What is an intersection type?',
+    options: [
+      { label: 'A', text: 'A type that can be one of several types (OR)' },
+      { label: 'B', text: 'A type that combines multiple types into one that has all their properties (AND)' },
+      { label: 'C', text: 'A type that only includes properties shared between two types' },
+      { label: 'D', text: 'A type that filters out null and undefined' },
+    ],
+    correct_answer: 'B',
+    explanation: 'type Admin = User & { permissions: string[] } creates a type with all User properties plus permissions. The & operator combines types — the result must satisfy ALL constituent types. Unlike unions (|) where a value matches ONE of the types.',
+  },
+  {
+    topic: 'typescript', difficulty: 'hard', format: 'short_answer',
+    question: 'What TypeScript utility type extracts the return type of a function type?',
+    options: null,
+    correct_answer: 'ReturnType',
+    explanation: 'ReturnType<typeof myFunction> gives you the type that the function returns. Useful when you need to type a variable that will hold the result of a function call without manually duplicating the type. Similarly, Parameters<typeof fn> extracts the parameter types as a tuple.',
+  },
+  {
+    topic: 'typescript', difficulty: 'hard', format: 'multiple_choice',
+    question: 'What is the never type used for?',
+    options: [
+      { label: 'A', text: 'A type for values that should always be null' },
+      { label: 'B', text: 'A type representing values that never occur — functions that throw or infinite loops' },
+      { label: 'C', text: 'A type that accepts any value but prevents reading it' },
+      { label: 'D', text: 'A placeholder type for future implementation' },
+    ],
+    correct_answer: 'B',
+    explanation: 'never represents the empty type — no value can be assigned to it. Functions that always throw or have infinite loops return never. It is also useful in exhaustive checks: in the default branch of a switch, assigning to never ensures you handled all cases.',
+  },
+
+  // ─── CSS (batch 2) ───────────────────────────────────────────────────────
+
+  {
+    topic: 'css', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What does box-sizing: border-box do?',
+    options: [
+      { label: 'A', text: 'It adds a border around every element' },
+      { label: 'B', text: 'It makes width and height include padding and border, not just content' },
+      { label: 'C', text: 'It removes all margins from the element' },
+      { label: 'D', text: 'It makes the element a flex container' },
+    ],
+    correct_answer: 'B',
+    explanation: 'By default (content-box), width: 200px means 200px of content plus padding and border on top. With border-box, 200px is the total including padding and border. Most projects set * { box-sizing: border-box } globally to make sizing predictable.',
+  },
+  {
+    topic: 'css', difficulty: 'easy', format: 'short_answer',
+    question: 'What CSS property do you use to center items on the cross axis in a flex container?',
+    options: null,
+    correct_answer: 'align-items',
+    explanation: 'In a flex container, align-items controls alignment on the cross axis (vertical by default). align-items: center vertically centers children. justify-content controls the main axis (horizontal by default). Remember: justify = main axis, align = cross axis.',
+  },
+  {
+    topic: 'css', difficulty: 'easy', format: 'multiple_choice',
+    question: 'What unit would you use for a font size that scales with the root element?',
+    options: [
+      { label: 'A', text: 'px' },
+      { label: 'B', text: 'em' },
+      { label: 'C', text: 'rem' },
+      { label: 'D', text: '%' },
+    ],
+    correct_answer: 'C',
+    explanation: 'rem is relative to the root (html) element\'s font size. If html is 16px, 1rem = 16px everywhere. Unlike em which compounds based on parent elements, rem is always predictable. It is the preferred unit for responsive typography.',
+  },
+  {
+    topic: 'css', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What is the difference between flexbox and grid?',
+    options: [
+      { label: 'A', text: 'Flexbox is one-dimensional (row or column); Grid is two-dimensional (rows and columns simultaneously)' },
+      { label: 'B', text: 'Grid is older and less supported; flexbox is the modern approach' },
+      { label: 'C', text: 'Flexbox only works for navigation; grid only works for page layouts' },
+      { label: 'D', text: 'They are identical — grid is just the newer name for flexbox' },
+    ],
+    correct_answer: 'A',
+    explanation: 'Flexbox lays out items along one axis — either a row or a column. Grid works in two dimensions simultaneously, letting you control both row and column placement. Use flexbox for components (nav bars, card rows), grid for page-level layouts.',
+  },
+  {
+    topic: 'css', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What does the calc() function do in CSS?',
+    options: [
+      { label: 'A', text: 'It calculates the specificity of a selector' },
+      { label: 'B', text: 'It lets you perform math operations with mixed units in CSS values' },
+      { label: 'C', text: 'It converts pixels to rem automatically' },
+      { label: 'D', text: 'It pre-calculates values at build time for performance' },
+    ],
+    correct_answer: 'B',
+    explanation: 'width: calc(100% - 2rem) subtracts 2rem from 100% of the container. calc() can mix any units: px, %, rem, vw, vh. It runs at render time in the browser — not at build time. Useful for layouts that need to combine fixed and fluid measurements.',
+  },
+  {
+    topic: 'css', difficulty: 'medium', format: 'multiple_choice',
+    question: 'What is a media query used for?',
+    options: [
+      { label: 'A', text: 'Querying a database for images to display' },
+      { label: 'B', text: 'Applying CSS rules conditionally based on device characteristics like screen width' },
+      { label: 'C', text: 'Loading different JavaScript files based on the browser' },
+      { label: 'D', text: 'Detecting if the user has a camera or microphone' },
+    ],
+    correct_answer: 'B',
+    explanation: '@media (max-width: 768px) { ... } applies styles only when the viewport is 768px or narrower. Media queries are the foundation of responsive design. You can query width, height, orientation, color-scheme (dark mode), reduced-motion preference, and more.',
+  },
+  {
+    topic: 'css', difficulty: 'hard', format: 'multiple_choice',
+    question: 'What is the difference between transform and position for moving elements?',
+    options: [
+      { label: 'A', text: 'They are identical — transform is just newer syntax' },
+      { label: 'B', text: 'transform moves an element visually without affecting layout; position changes the element\'s place in the document flow' },
+      { label: 'C', text: 'position triggers GPU acceleration; transform does not' },
+      { label: 'D', text: 'transform only works on inline elements' },
+    ],
+    correct_answer: 'B',
+    explanation: 'transform: translateX(100px) moves the element visually but other elements still behave as if it is in its original position. Position changes (top, left with position: relative/absolute) can affect layout. Transforms also get GPU-composited, making them cheaper for animations.',
+  },
+  {
+    topic: 'css', difficulty: 'hard', format: 'multiple_choice',
+    question: 'What CSS property would you use to create a smooth transition when a property changes?',
+    options: [
+      { label: 'A', text: 'animation' },
+      { label: 'B', text: 'transition' },
+      { label: 'C', text: 'transform' },
+      { label: 'D', text: 'will-change' },
+    ],
+    correct_answer: 'B',
+    explanation: 'transition: background-color 0.3s ease smoothly animates between states (e.g. hover). Transitions animate FROM one state TO another. Animations (@keyframes) define multi-step sequences. will-change is a performance hint, transform is for spatial changes.',
+  },
 ]
 
 async function seed() {

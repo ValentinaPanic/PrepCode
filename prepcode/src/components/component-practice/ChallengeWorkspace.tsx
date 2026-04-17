@@ -11,9 +11,10 @@ import { ScorePanel } from './ScorePanel'
 interface Props {
   challenge: ComponentChallenge
   onBack: () => void
+  onScoreUpdate?: (score: number) => void
 }
 
-export function ChallengeWorkspace({ challenge, onBack }: Props) {
+export function ChallengeWorkspace({ challenge, onBack, onScoreUpdate }: Props) {
   const [htmlValue, setHTMLValue] = useState(challenge.starterHTML)
   const [cssValue, setCSSValue] = useState(challenge.starterCSS)
   const [styleMode, setStyleMode] = useState<StyleMode>('css')
@@ -26,7 +27,14 @@ export function ChallengeWorkspace({ challenge, onBack }: Props) {
 
   const handleDOMSummary = useCallback((elements: DOMElement[]) => {
     setDomElements(elements)
-  }, [])
+
+    // Calculate score and report it up
+    if (onScoreUpdate) {
+      const passed = challenge.checks.filter(c => c.check(elements)).length
+      const percent = Math.round((passed / challenge.checks.length) * 100)
+      onScoreUpdate(percent)
+    }
+  }, [challenge.checks, onScoreUpdate])
 
   return (
     <div className="flex flex-col h-full">

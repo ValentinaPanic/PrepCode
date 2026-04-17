@@ -49,3 +49,24 @@ export interface QuizSessionState {
   history: QuizAttempt[]
   phase: QuizPhase
 }
+
+// ─── Stats (persisted to localStorage) ──────────────────────────────────────
+
+export interface QuizResult {
+  topic: QuizTopic
+  difficulty: 'easy' | 'medium' | 'hard'
+  score: number
+  total: number
+  date: string  // ISO string
+}
+
+export interface ChallengeResult {
+  challengeId: string
+  bestScore: number   // percentage 0-100
+  date: string        // ISO string
+}
+
+export interface UserStats {
+  quizResults: QuizResult[]
+  challengeResults: ChallengeResult[]
+}

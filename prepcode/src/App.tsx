@@ -6,7 +6,7 @@ import { ComponentPractice } from './modes/ComponentPractice'
 
 function App() {
   return (
-    <div className="bg-zinc-900 text-zinc-100 h-screen flex flex-col">
+    <div className="bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 h-screen flex flex-col">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomeScreen />} />

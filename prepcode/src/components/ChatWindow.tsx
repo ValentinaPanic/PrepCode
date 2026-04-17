@@ -29,7 +29,7 @@ export function ChatWindow({ messages, isLoading }: Props) {
 
       {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
         <div className="flex justify-start mb-4">
-          <div className="bg-zinc-800 rounded-2xl rounded-bl-sm px-4 py-3">
+          <div className="bg-zinc-200 dark:bg-zinc-800 rounded-2xl rounded-bl-sm px-4 py-3">
             <div className="flex gap-1">
               <span className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce [animation-delay:0ms]" />
               <span className="w-2 h-2 bg-zinc-500 rounded-full animate-bounce [animation-delay:150ms]" />

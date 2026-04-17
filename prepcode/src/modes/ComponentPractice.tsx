@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { ComponentChallenge } from '../data/componentChallenges'
+import { useStats } from '../hooks/useStats'
 import { ChallengeSelector } from '../components/component-practice/ChallengeSelector'
 import { ChallengeWorkspace } from '../components/component-practice/ChallengeWorkspace'
 
 export function ComponentPractice() {
   const navigate = useNavigate()
   const [activeChallenge, setActiveChallenge] = useState<ComponentChallenge | null>(null)
+  const { stats, saveChallengeResult } = useStats()
 
   if (activeChallenge) {
     return (
@@ -14,6 +16,13 @@ export function ComponentPractice() {
         key={activeChallenge.id}
         challenge={activeChallenge}
         onBack={() => setActiveChallenge(null)}
+        onScoreUpdate={(score) => {
+          saveChallengeResult({
+            challengeId: activeChallenge.id,
+            bestScore: score,
+            date: new Date().toISOString(),
+          })
+        }}
       />
     )
   }
@@ -31,7 +40,10 @@ export function ComponentPractice() {
         <h1 className="text-xl font-bold text-white">Component Practice</h1>
       </div>
 
-      <ChallengeSelector onSelect={setActiveChallenge} />
+      <ChallengeSelector
+        onSelect={setActiveChallenge}
+        challengeResults={stats.challengeResults}
+      />
     </div>
   )
 }
