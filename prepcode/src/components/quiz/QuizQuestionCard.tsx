@@ -1,6 +1,7 @@
 import type { QuizQuestion, QuizAttempt } from '../../types'
 import { QuizOptionButton } from './QuizOptionButton'
 import { QuizShortAnswerInput } from './QuizShortAnswerInput'
+import { CodeText } from './CodeText'
 
 interface QuizQuestionCardProps {
   question: QuizQuestion
@@ -24,7 +25,9 @@ export function QuizQuestionCard({ question, attempt, disabled, onAnswer }: Quiz
   return (
     <div className="flex flex-col gap-6 p-6">
       {/* Question text */}
-      <p className="text-white text-base leading-relaxed">{question.question}</p>
+      <div className="text-white text-base leading-relaxed">
+        <CodeText text={question.question} />
+      </div>
 
       {/* Answer input — MCQ or short answer */}
       {question.format === 'multiple_choice' && question.options ? (

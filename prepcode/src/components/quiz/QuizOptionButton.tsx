@@ -1,3 +1,5 @@
+import { CodeText } from './CodeText'
+
 interface QuizOptionButtonProps {
   label: 'A' | 'B' | 'C' | 'D'
   text: string
@@ -38,7 +40,9 @@ export function QuizOptionButton({ label, text, state, disabled, onClick }: Quiz
       `}>
         {label}
       </span>
-      <span className="text-sm leading-relaxed">{text}</span>
+      <span className="text-sm leading-relaxed">
+        <CodeText text={text} />
+      </span>
     </button>
   )
 }

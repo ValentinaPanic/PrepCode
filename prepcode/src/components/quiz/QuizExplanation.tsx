@@ -1,3 +1,5 @@
+import { CodeText } from './CodeText'
+
 interface QuizExplanationProps {
   text: string
   isLoading: boolean
@@ -19,7 +21,9 @@ export function QuizExplanation({ text, isLoading, isCorrect }: QuizExplanationP
       {isLoading && !text ? (
         <span className="text-zinc-500">Thinking...</span>
       ) : (
-        <p className="text-zinc-300 whitespace-pre-wrap">{text}</p>
+        <div className="text-zinc-300 whitespace-pre-wrap">
+          <CodeText text={text} />
+        </div>
       )}
     </div>
   )
