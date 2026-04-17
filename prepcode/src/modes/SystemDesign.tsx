@@ -5,6 +5,29 @@ import { ChatWindow } from '../components/ChatWindow'
 import { InputBar } from '../components/InputBar'
 import { systemDesignPrompt } from '../prompts/systemDesign'
 
+const STARTER_PROMPTS = [
+  'Give me a system design question about a real-time messaging or chat system.',
+  'Give me a system design question about a file storage or sharing service.',
+  'Give me a system design question about a feed or timeline ranking system.',
+  'Give me a system design question about a payment or checkout system.',
+  'Give me a system design question about a notification delivery service.',
+  'Give me a system design question about a URL shortener or link management service.',
+  'Give me a system design question about a video or media streaming platform.',
+  'Give me a system design question about a search autocomplete or typeahead service.',
+  'Give me a system design question about a ride-sharing or dispatch system.',
+  'Give me a system design question about a collaborative document editor.',
+  'Give me a system design question about a metrics, monitoring, or alerting dashboard.',
+  'Give me a system design question about a ticket or reservation booking system.',
+  'Give me a system design question about an email delivery service.',
+  'Give me a system design question about a rate limiter or API gateway.',
+  'Give me a system design question about a social media or content platform.',
+]
+
+function pickRandomStarter(): string {
+  const index = Math.floor(Math.random() * STARTER_PROMPTS.length)
+  return STARTER_PROMPTS[index]
+}
+
 export function SystemDesign() {
   const navigate = useNavigate()
   const { messages, isLoading, error, sendMessage, reset } = useClaude(
@@ -12,9 +35,9 @@ export function SystemDesign() {
     'system_design'
   )
 
-  // Kick off the interview automatically when the mode loads
+  // Kick off the interview with a random topic each session
   useEffect(() => {
-    sendMessage('Start the interview. Give me a system design question.')
+    sendMessage(pickRandomStarter())
   }, [])
 
   return (
