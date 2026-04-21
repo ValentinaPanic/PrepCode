@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react'
 import type { Message } from '../types'
+import { useApiKey, authHeaders } from '../contexts/ApiKeyContext'
 
 export type { Message }
 
@@ -10,6 +11,7 @@ export function useClaude(systemPrompt: string, mode: string) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const sessionId = useRef<string | null>(null)
+  const { apiKey } = useApiKey()
 
   const sendMessage = useCallback(
     async (userMessage: string) => {
@@ -43,7 +45,10 @@ export function useClaude(systemPrompt: string, mode: string) {
         // Start streaming from the server
         const response = await fetch(`${API_URL}/api/chat`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...authHeaders(apiKey),
+          },
           body: JSON.stringify({
             messages: newMessages,
             systemPrompt,
@@ -83,7 +88,7 @@ export function useClaude(systemPrompt: string, mode: string) {
         setIsLoading(false)
       }
     },
-    [messages, systemPrompt, mode]
+    [messages, systemPrompt, mode, apiKey]
   )
 
   const reset = useCallback(() => {

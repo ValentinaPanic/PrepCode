@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import type { QuizTopic, QuizQuestion, QuizAttempt, QuizSessionState } from '../types'
+import { useApiKey, authHeaders } from '../contexts/ApiKeyContext'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
@@ -18,6 +19,7 @@ export function useQuiz() {
   const [state, setState] = useState<QuizSessionState>(initialState)
   const sessionId = useRef<string | null>(null)
   const previousQuestions = useRef<string[]>([])
+  const { apiKey } = useApiKey()
 
   // ─── Session creation ───────────────────────────────────────────────────────
 
@@ -42,7 +44,10 @@ export function useQuiz() {
     try {
       const res = await fetch(`${API_URL}/api/quiz/question`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...authHeaders(apiKey),
+        },
         body: JSON.stringify({
           topic,
           difficulty,
@@ -65,7 +70,7 @@ export function useQuiz() {
       console.error(err)
       setState(prev => ({ ...prev, phase: 'idle' }))
     }
-  }, [])
+  }, [apiKey])
 
   // ─── Start session ──────────────────────────────────────────────────────────
 
@@ -112,7 +117,10 @@ export function useQuiz() {
     try {
       const res = await fetch(`${API_URL}/api/quiz/evaluate`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...authHeaders(apiKey),
+        },
         body: JSON.stringify({
           question: currentQuestion,
           userAnswer,
@@ -182,7 +190,7 @@ export function useQuiz() {
       console.error(err)
       setState(prev => ({ ...prev, phase: 'explanation_shown' }))
     }
-  }, [state])
+  }, [state, apiKey])
 
   // ─── Next question or finish ────────────────────────────────────────────────
 

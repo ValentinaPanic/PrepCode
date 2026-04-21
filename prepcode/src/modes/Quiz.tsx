@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuiz } from '../hooks/useQuiz'
 import { useStats } from '../hooks/useStats'
+import { useApiKey } from '../contexts/ApiKeyContext'
 import { Nav } from '../components/Nav'
 import { QuizScoreBar } from '../components/quiz/QuizScoreBar'
 import { QuizTopicSelector } from '../components/quiz/QuizTopicSelector'
@@ -13,6 +14,7 @@ export function Quiz() {
   const navigate = useNavigate()
   const { state, startSession, submitAnswer, nextQuestion, reset } = useQuiz()
   const { saveQuizResult } = useStats()
+  const { hasKey, openModal } = useApiKey()
   const { phase, currentQuestion, currentAttempt, score, total } = state
   const savedRef = useRef(false)
 
@@ -59,7 +61,20 @@ export function Quiz() {
       <div className="flex flex-col flex-1 overflow-y-auto">
 
         {phase === 'idle' && (
-          <QuizTopicSelector onStart={startSession} />
+          <>
+            {!hasKey && (
+              <div className="mx-6 mt-6 p-4 bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-900/30 rounded-xl text-sm">
+                <p className="text-amber-900 dark:text-amber-200">
+                  Using fallback questions — no API key set.{' '}
+                  <button onClick={openModal} className="underline hover:text-amber-950 dark:hover:text-amber-100">
+                    Add a key
+                  </button>{' '}
+                  for Claude-generated questions and personalised explanations.
+                </p>
+              </div>
+            )}
+            <QuizTopicSelector onStart={startSession} />
+          </>
         )}
 
         {phase === 'loading_question' && (

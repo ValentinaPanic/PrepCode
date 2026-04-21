@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import { useClaude } from '../hooks/useClaude'
+import { useApiKey } from '../contexts/ApiKeyContext'
 import { Nav } from '../components/Nav'
 import { ChatWindow } from '../components/ChatWindow'
 import { InputBar } from '../components/InputBar'
@@ -38,6 +39,7 @@ export function SystemDesign() {
   const [sessionsLoading, setSessionsLoading] = useState(false)
   const [artifacts, setArtifacts] = useState<Artifact[]>([])
   const [editor, setEditor] = useState<EditorState | null>(null)
+  const { hasKey, openModal } = useApiKey()
 
   const {
     messages,
@@ -233,6 +235,34 @@ export function SystemDesign() {
 
   const handleArtifactDelete = (id: string) => {
     setArtifacts(prev => prev.filter(a => a.id !== id))
+  }
+
+  // System Design always needs a live Claude connection — gate it behind a
+  // key. Existing sessions would just fail on every send without one.
+  if (!hasKey) {
+    return (
+      <div className="flex flex-col h-full">
+        <Nav subtitle="System Design" />
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className="max-w-md text-center">
+            <h2 className="text-zinc-900 dark:text-white text-xl font-semibold mb-2">
+              System Design needs an API key
+            </h2>
+            <p className="text-zinc-600 dark:text-zinc-400 text-sm mb-5 leading-relaxed">
+              This mode runs a live interview with Claude, so it can't fall back to
+              static content. Add your Anthropic key to get started — it stays in your
+              browser.
+            </p>
+            <button
+              onClick={openModal}
+              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-lg transition-colors"
+            >
+              Set up API key
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
