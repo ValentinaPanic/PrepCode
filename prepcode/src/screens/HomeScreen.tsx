@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { ModeCard } from '../components/ModeCard'
+import { Nav } from '../components/Nav'
 import { useStats } from '../hooks/useStats'
-import { useTheme } from '../hooks/useTheme'
 import { challenges } from '../data/componentChallenges'
 
 function timeAgo(dateStr: string): string {
@@ -17,7 +17,6 @@ function timeAgo(dateStr: string): string {
 
 export function HomeScreen() {
   const navigate = useNavigate()
-  const { theme, toggle: toggleTheme } = useTheme()
   const {
     totalQuizSessions,
     totalChallengesCompleted,
@@ -27,44 +26,42 @@ export function HomeScreen() {
 
   const hasActivity = recentActivity.length > 0
 
-  // Build detail strings for mode cards
   const quizDetail = totalQuizSessions > 0
-    ? `${totalQuizSessions} session${totalQuizSessions === 1 ? '' : 's'} · avg ${averageQuizScore}%`
+    ? `${totalQuizSessions} · ${averageQuizScore}%`
     : undefined
 
   const challengeDetail = totalChallengesCompleted > 0
-    ? `${totalChallengesCompleted}/${challenges.length} completed`
+    ? `${totalChallengesCompleted}/${challenges.length}`
     : undefined
 
   return (
     <div className="flex flex-col h-full">
-      {/* Nav bar */}
-      <nav className="flex items-center justify-between px-8 py-4 border-b border-zinc-200 dark:border-zinc-800">
-        <h1 className="text-lg font-bold tracking-tight">
-          <span className="text-indigo-500 dark:text-indigo-400">&lt;</span>
-          <span className="text-zinc-900 dark:text-white">Prep</span>
-          <span className="text-zinc-500 dark:text-zinc-400">Code</span>
-          <span className="text-indigo-500 dark:text-indigo-400"> /&gt;</span>
-        </h1>
-        <button
-          onClick={toggleTheme}
-          className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors p-2 rounded-lg hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50"
-          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
-      </nav>
+      <Nav />
 
       <div className="flex-1 overflow-y-auto">
-        {/* Hero section */}
-        <div className="px-8 pt-10 pb-8">
-          <p className="text-zinc-900 dark:text-white text-xl font-semibold">Welcome back</p>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-1">Frontend interview practice, one session at a time.</p>
+        {/* Hero section with subtle background accent */}
+        <div className="relative overflow-hidden border-b border-zinc-200 dark:border-zinc-800">
+          {/* Decorative gradient */}
+          <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-emerald-500/5 dark:from-indigo-500/10 dark:to-emerald-500/10 pointer-events-none" />
+
+          <div className="relative px-8 pt-12 pb-14 max-w-4xl">
+            <p className="font-mono text-xs text-indigo-600 dark:text-indigo-400 mb-4 tracking-wide">
+              // frontend interview prep
+            </p>
+            <h1 className="text-zinc-900 dark:text-white text-4xl sm:text-5xl font-bold tracking-tight leading-[1.1]">
+              Practice like you're<br />
+              <span className="text-indigo-600 dark:text-indigo-400">in the interview.</span>
+            </h1>
+            <p className="text-zinc-500 dark:text-zinc-400 text-base mt-5 max-w-xl leading-relaxed">
+              Three modes built around how frontend interviews actually go: talking through systems,
+              rapid-fire fundamentals, and writing real components. No passive reading.
+            </p>
+          </div>
         </div>
 
         {/* Stats bar — only shows after first activity */}
         {hasActivity && (
-          <div className="px-8 mb-8">
+          <div className="px-8 pt-8">
             <div className="flex gap-4">
               <div className="flex-1 bg-white dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/50 rounded-xl px-4 py-3">
                 <p className="text-zinc-500 text-xs">Quiz sessions</p>
@@ -82,36 +79,63 @@ export function HomeScreen() {
           </div>
         )}
 
-        {/* Mode grid */}
-        <div className="px-8">
+        {/* Mode grid — System Design is featured (spans 2 cols on md+) */}
+        <div className="px-8 pt-10">
           <h2 className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wide mb-4">Practice modes</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <ModeCard
               title="System Design"
-              description="Back and forth with a strict AI interviewer. API contracts, architecture, failure states — nothing gets skipped."
+              description="A real back-and-forth interview. Pick a topic, defend your decisions — from API contracts to failure modes."
               icon="🏗️"
+              accent="indigo"
               onClick={() => navigate('/system-design')}
             />
             <ModeCard
               title="Quiz"
-              description="Quick-fire questions on React, JavaScript, TypeScript, and CSS. Good for warming up or filling gaps."
+              description="Quick-fire on React, JS, TS, CSS. Good for warming up or filling gaps."
               icon="⚡"
-              onClick={() => navigate('/quiz')}
+              accent="amber"
               detail={quizDetail}
+              onClick={() => navigate('/quiz')}
             />
             <ModeCard
-              title="Component Practice"
-              description="Build accessible HTML components from scratch — button, form, input, nav, and more. Scored on correctness."
+              title="Components"
+              description="Write accessible HTML from scratch. Scored on semantics and a11y."
               icon="🧩"
-              onClick={() => navigate('/components')}
+              accent="emerald"
               detail={challengeDetail}
+              onClick={() => navigate('/components')}
             />
           </div>
         </div>
 
+        {/* How it works — only shown when there's no activity yet (onboarding) */}
+        {!hasActivity && (
+          <div className="px-8 pt-12 pb-4">
+            <h2 className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wide mb-4">How it works</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <div className="font-mono text-xs text-zinc-400 dark:text-zinc-600 mb-2">01</div>
+                <h3 className="text-zinc-900 dark:text-white font-medium text-sm mb-1">Pick a mode</h3>
+                <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed">Pressure-test a different skill each session — design, recall, or hands-on coding.</p>
+              </div>
+              <div>
+                <div className="font-mono text-xs text-zinc-400 dark:text-zinc-600 mb-2">02</div>
+                <h3 className="text-zinc-900 dark:text-white font-medium text-sm mb-1">Get pushed</h3>
+                <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed">The AI interviewer won't let vague answers slide. You have to actually commit to a choice.</p>
+              </div>
+              <div>
+                <div className="font-mono text-xs text-zinc-400 dark:text-zinc-600 mb-2">03</div>
+                <h3 className="text-zinc-900 dark:text-white font-medium text-sm mb-1">Track progress</h3>
+                <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed">Your stats and recent sessions show up here. No account needed — it's saved locally.</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Recent activity */}
         {hasActivity && (
-          <div className="px-8 mt-8 pb-8">
+          <div className="px-8 pt-10 pb-8">
             <h2 className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wide mb-3">Recent activity</h2>
             <div className="bg-white dark:bg-zinc-800/30 border border-zinc-200 dark:border-zinc-700/50 rounded-xl overflow-hidden">
               {recentActivity.map((item, i) => (
@@ -120,7 +144,7 @@ export function HomeScreen() {
                 }`}>
                   <div className="flex items-center gap-3">
                     <span className={`w-1.5 h-1.5 rounded-full ${
-                      item.type === 'quiz' ? 'bg-indigo-400' : 'bg-emerald-400'
+                      item.type === 'quiz' ? 'bg-amber-400' : 'bg-emerald-400'
                     }`} />
                     <span className="text-zinc-700 dark:text-zinc-300 text-sm">
                       {item.type === 'quiz' ? 'Quiz' : 'Challenge'}: {item.label}
@@ -135,6 +159,13 @@ export function HomeScreen() {
             </div>
           </div>
         )}
+
+        {/* Tagline footer */}
+        <div className="px-8 pb-10 pt-6">
+          <p className="font-mono text-xs text-zinc-400 dark:text-zinc-600">
+            &lt;built for junior → senior frontend roles /&gt;
+          </p>
+        </div>
       </div>
     </div>
   )

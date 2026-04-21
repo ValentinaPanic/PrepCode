@@ -25,8 +25,8 @@ export function QuizTopicSelector({ onStart }: QuizTopicSelectorProps) {
   return (
     <div className="flex flex-col items-center justify-center flex-1 px-8 py-12 gap-10">
       <div className="text-center">
-        <h2 className="text-white text-xl font-semibold">Choose a topic</h2>
-        <p className="text-zinc-500 text-sm mt-1">10 questions per session</p>
+        <h2 className="text-zinc-900 dark:text-white text-xl font-semibold">Choose a topic</h2>
+        <p className="text-zinc-500 dark:text-zinc-500 text-sm mt-1">10 questions per session</p>
       </div>
 
       {/* Topic grid */}
@@ -38,8 +38,8 @@ export function QuizTopicSelector({ onStart }: QuizTopicSelectorProps) {
             className={`
               flex flex-col items-center gap-2 p-5 rounded-xl border transition-all
               ${topic === t.value
-                ? 'bg-indigo-600/20 border-indigo-500 text-white'
-                : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200'
+                ? 'bg-indigo-100 dark:bg-indigo-600/20 border-indigo-500 text-indigo-900 dark:text-white'
+                : 'bg-white dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:border-zinc-400 dark:hover:border-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'
               }
             `}
           >
@@ -58,13 +58,13 @@ export function QuizTopicSelector({ onStart }: QuizTopicSelectorProps) {
             className={`
               flex flex-col items-center px-4 py-2.5 rounded-lg border text-sm transition-all
               ${difficulty === d.value
-                ? 'bg-zinc-700 border-zinc-500 text-white'
-                : 'bg-zinc-800/50 border-zinc-700 text-zinc-500 hover:border-zinc-500'
+                ? 'bg-zinc-800 dark:bg-zinc-700 border-zinc-800 dark:border-zinc-500 text-white'
+                : 'bg-white dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-500 hover:border-zinc-400 dark:hover:border-zinc-500'
               }
             `}
           >
             <span className="font-medium">{d.label}</span>
-            <span className="text-xs text-zinc-500 mt-0.5">{d.description}</span>
+            <span className={`text-xs mt-0.5 ${difficulty === d.value ? 'text-zinc-300' : 'text-zinc-500 dark:text-zinc-500'}`}>{d.description}</span>
           </button>
         ))}
       </div>

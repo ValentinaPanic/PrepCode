@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useQuiz } from '../hooks/useQuiz'
 import { useStats } from '../hooks/useStats'
+import { Nav } from '../components/Nav'
 import { QuizScoreBar } from '../components/quiz/QuizScoreBar'
 import { QuizTopicSelector } from '../components/quiz/QuizTopicSelector'
 import { QuizQuestionCard } from '../components/quiz/QuizQuestionCard'
@@ -36,30 +37,18 @@ export function Quiz() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-800">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate('/')}
-            className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
-            aria-label="Back to home"
-          >
-            ←
-          </button>
-          <div>
-            <h1 className="text-zinc-900 dark:text-white font-semibold">Quiz</h1>
-            <p className="text-zinc-500 text-xs mt-0.5">React · JavaScript · TypeScript · CSS</p>
-          </div>
-        </div>
-        {phase !== 'idle' && (
+      <Nav subtitle="Quiz" />
+
+      {phase !== 'idle' && (
+        <div className="flex justify-end px-8 py-3 border-b border-zinc-200 dark:border-zinc-800">
           <button
             onClick={reset}
-            className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors"
+            className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 text-sm transition-colors"
           >
             New session
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Score bar — visible once a session is active */}
       {phase !== 'idle' && phase !== 'session_complete' && (
@@ -77,17 +66,17 @@ export function Quiz() {
           <div className="flex flex-col gap-6 p-6 animate-pulse">
             {/* Question text skeleton */}
             <div className="space-y-2">
-              <div className="h-4 bg-zinc-800 rounded w-full" />
-              <div className="h-4 bg-zinc-800 rounded w-4/5" />
-              <div className="h-4 bg-zinc-800 rounded w-3/5" />
+              <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-full" />
+              <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-4/5" />
+              <div className="h-4 bg-zinc-200 dark:bg-zinc-800 rounded w-3/5" />
             </div>
 
             {/* Option skeletons */}
             <div className="flex flex-col gap-2">
               {[1, 2, 3, 4].map(i => (
-                <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-zinc-800 bg-zinc-800/30">
-                  <div className="w-7 h-7 rounded-lg bg-zinc-700" />
-                  <div className="h-3.5 bg-zinc-700 rounded flex-1" style={{ width: `${50 + i * 10}%` }} />
+                <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800/30">
+                  <div className="w-7 h-7 rounded-lg bg-zinc-200 dark:bg-zinc-700" />
+                  <div className="h-3.5 bg-zinc-200 dark:bg-zinc-700 rounded flex-1" style={{ width: `${50 + i * 10}%` }} />
                 </div>
               ))}
             </div>

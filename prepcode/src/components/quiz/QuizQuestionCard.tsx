@@ -25,7 +25,7 @@ export function QuizQuestionCard({ question, attempt, disabled, onAnswer }: Quiz
   return (
     <div className="flex flex-col gap-6 p-6">
       {/* Question text */}
-      <div className="text-white text-base leading-relaxed">
+      <div className="text-zinc-900 dark:text-white text-base leading-relaxed">
         <CodeText text={question.question} />
       </div>
 

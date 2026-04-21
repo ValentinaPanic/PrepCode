@@ -70,3 +70,25 @@ export interface UserStats {
   quizResults: QuizResult[]
   challengeResults: ChallengeResult[]
 }
+
+// ─── Sessions (from the server) ─────────────────────────────────────────────
+
+interface SessionBase {
+  id: string
+  mode: string
+  topic: string | null
+  created_at: string
+}
+
+export interface SessionSummary extends SessionBase {
+  messages?: { count: number }[]
+}
+
+export interface SessionWithMessages extends SessionBase {
+  messages: Array<{
+    id: string
+    role: 'user' | 'assistant'
+    content: string
+    created_at: string
+  }>
+}

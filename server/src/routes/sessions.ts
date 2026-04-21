@@ -60,6 +60,34 @@ router.get('/:id', async (req: Request, res: Response) => {
   res.json(data)
 })
 
+// Delete a session and all its messages
+router.delete('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params
+
+  // Delete messages first in case the FK doesn't cascade
+  const { error: msgError } = await supabase
+    .from('messages')
+    .delete()
+    .eq('session_id', id)
+
+  if (msgError) {
+    res.status(500).json({ error: msgError.message })
+    return
+  }
+
+  const { error: sessionError } = await supabase
+    .from('sessions')
+    .delete()
+    .eq('id', id)
+
+  if (sessionError) {
+    res.status(500).json({ error: sessionError.message })
+    return
+  }
+
+  res.status(204).send()
+})
+
 // Save a user message to a session
 router.post('/:id/messages', async (req: Request, res: Response) => {
   const { id } = req.params

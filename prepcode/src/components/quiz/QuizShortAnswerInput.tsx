@@ -31,8 +31,8 @@ export function QuizShortAnswerInput({ disabled, onSubmit }: QuizShortAnswerInpu
         disabled={disabled}
         placeholder="Type your answer..."
         className="
-          w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-700
-          text-white placeholder-zinc-500 text-sm
+          w-full px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700
+          text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 text-sm
           focus:outline-none focus:border-indigo-500
           disabled:opacity-50 disabled:cursor-not-allowed
           transition-colors

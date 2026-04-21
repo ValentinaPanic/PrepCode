@@ -16,9 +16,9 @@ export function CodeText({ text, className }: { text: string; className?: string
           return (
             <pre
               key={i}
-              className="bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 my-2 overflow-x-auto"
+              className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg px-4 py-3 my-2 overflow-x-auto"
             >
-              <code className="text-zinc-300 text-xs font-mono whitespace-pre">
+              <code className="text-zinc-800 dark:text-zinc-300 text-xs font-mono whitespace-pre">
                 {part.content}
               </code>
             </pre>
@@ -29,7 +29,7 @@ export function CodeText({ text, className }: { text: string; className?: string
           return (
             <code
               key={i}
-              className="bg-zinc-800/80 text-zinc-200 px-1.5 py-0.5 rounded text-sm font-mono border border-zinc-700/50"
+              className="bg-zinc-100 dark:bg-zinc-800/80 text-zinc-800 dark:text-zinc-200 px-1.5 py-0.5 rounded text-sm font-mono border border-zinc-200 dark:border-zinc-700/50"
             >
               {part.content}
             </code>

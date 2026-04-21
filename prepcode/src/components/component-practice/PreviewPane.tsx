@@ -71,8 +71,8 @@ export function PreviewPane({ htmlValue, cssValue, styleMode, onDOMSummary, runC
 
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <span className="text-zinc-500 text-xs mb-1 font-mono">Preview</span>
-      <div className="flex-1 min-h-0 rounded-lg border border-zinc-700 overflow-hidden bg-white">
+      <span className="text-zinc-600 dark:text-zinc-500 text-xs mb-1 font-mono">Preview</span>
+      <div className="flex-1 min-h-0 rounded-lg border border-zinc-300 dark:border-zinc-700 overflow-hidden bg-white">
         {runCount > 0 ? (
           <iframe
             ref={iframeRef}
@@ -83,7 +83,7 @@ export function PreviewPane({ htmlValue, cssValue, styleMode, onDOMSummary, runC
             title="Component preview"
           />
         ) : (
-          <div className="flex items-center justify-center h-full text-zinc-400 text-sm bg-zinc-800">
+          <div className="flex items-center justify-center h-full text-zinc-500 dark:text-zinc-400 text-sm bg-zinc-100 dark:bg-zinc-800">
             Click Run to see your component
           </div>
         )}

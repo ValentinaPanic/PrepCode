@@ -16,8 +16,8 @@ export function CodeEditorPane({ htmlValue, cssValue, onHTMLChange, onCSSChange,
     <div className="flex flex-col gap-2 flex-1 min-h-0">
       {/* HTML editor — always visible */}
       <div className="flex-1 min-h-0 flex flex-col">
-        <span className="text-zinc-500 text-xs mb-1 font-mono">HTML</span>
-        <div className="flex-1 min-h-0 overflow-auto rounded-lg border border-zinc-700">
+        <span className="text-zinc-600 dark:text-zinc-500 text-xs mb-1 font-mono">HTML</span>
+        <div className="flex-1 min-h-0 overflow-auto rounded-lg border border-zinc-300 dark:border-zinc-700">
           <CodeMirror
             value={htmlValue}
             onChange={onHTMLChange}
@@ -32,8 +32,8 @@ export function CodeEditorPane({ htmlValue, cssValue, onHTMLChange, onCSSChange,
       {/* CSS editor — only visible in CSS mode */}
       {styleMode === 'css' && (
         <div className="flex-1 min-h-0 flex flex-col">
-          <span className="text-zinc-500 text-xs mb-1 font-mono">CSS</span>
-          <div className="flex-1 min-h-0 overflow-auto rounded-lg border border-zinc-700">
+          <span className="text-zinc-600 dark:text-zinc-500 text-xs mb-1 font-mono">CSS</span>
+          <div className="flex-1 min-h-0 overflow-auto rounded-lg border border-zinc-300 dark:border-zinc-700">
             <CodeMirror
               value={cssValue}
               onChange={onCSSChange}

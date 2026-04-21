@@ -22,7 +22,7 @@ export function useClaude(systemPrompt: string, mode: string) {
       setError(null)
 
       try {
-        // Create a session on the first message
+        // Create a session on the first message (only if none is attached yet)
         if (!sessionId.current) {
           const sessionRes = await fetch(`${API_URL}/api/sessions`, {
             method: 'POST',
@@ -92,5 +92,28 @@ export function useClaude(systemPrompt: string, mode: string) {
     sessionId.current = null
   }, [])
 
-  return { messages, isLoading, error, sendMessage, reset, sessionId: sessionId.current }
+  // Hydrate the hook from an existing session (e.g. resume after reload).
+  // Sets the sessionId so subsequent sendMessage calls continue the same DB row.
+  const loadSession = useCallback((id: string, history: Message[]) => {
+    sessionId.current = id
+    setMessages(history)
+    setError(null)
+  }, [])
+
+  // Attach a pre-created sessionId to this hook instance without any messages yet.
+  // Used when we create the DB session upfront (before the first user message).
+  const attachSession = useCallback((id: string) => {
+    sessionId.current = id
+  }, [])
+
+  return {
+    messages,
+    isLoading,
+    error,
+    sendMessage,
+    reset,
+    loadSession,
+    attachSession,
+    sessionId: sessionId.current,
+  }
 }

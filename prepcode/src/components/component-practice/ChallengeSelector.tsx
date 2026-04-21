@@ -10,8 +10,8 @@ interface Props {
 export function ChallengeSelector({ onSelect, challengeResults = [] }: Props) {
   return (
     <div className="p-8">
-      <h2 className="text-lg font-semibold text-white mb-1">Choose a challenge</h2>
-      <p className="text-zinc-400 text-sm mb-6">
+      <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-1">Choose a challenge</h2>
+      <p className="text-zinc-600 dark:text-zinc-400 text-sm mb-6">
         Build each component with correct, accessible HTML. Scored on semantics, not style.
       </p>
 
@@ -26,20 +26,20 @@ export function ChallengeSelector({ onSelect, challengeResults = [] }: Props) {
               onClick={() => onSelect(c)}
               className={`text-left rounded-xl p-4 transition-colors border ${
                 isPerfect
-                  ? 'bg-emerald-900/20 border-emerald-800/40 hover:border-emerald-600'
-                  : 'bg-zinc-800 border-zinc-700 hover:border-indigo-500'
+                  ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-300 dark:border-emerald-800/40 hover:border-emerald-500 dark:hover:border-emerald-600'
+                  : 'bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 hover:border-indigo-500'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-zinc-500 text-xs font-mono">{String(i + 1).padStart(2, '0')}</span>
+                <span className="text-zinc-500 dark:text-zinc-500 text-xs font-mono">{String(i + 1).padStart(2, '0')}</span>
                 {result && (
-                  <span className={`text-xs font-medium ${isPerfect ? 'text-emerald-400' : 'text-zinc-500'}`}>
+                  <span className={`text-xs font-medium ${isPerfect ? 'text-emerald-700 dark:text-emerald-400' : 'text-zinc-500 dark:text-zinc-500'}`}>
                     {result.bestScore}%
                   </span>
                 )}
               </div>
-              <h3 className="text-white text-sm font-medium mt-1">{c.title}</h3>
-              <p className="text-zinc-400 text-xs mt-1 line-clamp-2">{c.description}</p>
+              <h3 className="text-zinc-900 dark:text-white text-sm font-medium mt-1">{c.title}</h3>
+              <p className="text-zinc-600 dark:text-zinc-400 text-xs mt-1 line-clamp-2">{c.description}</p>
             </button>
           )
         })}

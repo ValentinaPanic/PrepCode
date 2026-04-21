@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import type { ComponentChallenge } from '../../data/componentChallenges'
 import type { DOMElement } from '../../lib/specChecks'
 import type { StyleMode } from './StyleModeToggle'
+import { Nav } from '../Nav'
 import { ChallengeDescription } from './ChallengeDescription'
 import { StyleModeToggle } from './StyleModeToggle'
 import { CodeEditorPane } from './CodeEditorPane'
@@ -38,11 +39,13 @@ export function ChallengeWorkspace({ challenge, onBack, onScoreUpdate }: Props) 
 
   return (
     <div className="flex flex-col h-full">
-      {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
+      <Nav subtitle={`Component Practice · ${challenge.title}`} />
+
+      {/* Workspace toolbar */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-200 dark:border-zinc-800">
         <button
           onClick={onBack}
-          className="text-zinc-400 hover:text-white text-sm transition-colors"
+          className="text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-white text-sm transition-colors"
         >
           &larr; Challenges
         </button>
@@ -58,10 +61,10 @@ export function ChallengeWorkspace({ challenge, onBack, onScoreUpdate }: Props) 
       {/* Main content — 3-column layout */}
       <div className="flex flex-1 min-h-0">
         {/* Left: description + score */}
-        <div className="w-64 shrink-0 border-r border-zinc-800 p-4 overflow-y-auto">
+        <div className="w-64 shrink-0 border-r border-zinc-200 dark:border-zinc-800 p-4 overflow-y-auto">
           <ChallengeDescription challenge={challenge} />
-          <div className="mt-6 pt-4 border-t border-zinc-800">
-            <h3 className="text-zinc-400 text-xs font-semibold uppercase tracking-wide mb-3">
+          <div className="mt-6 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+            <h3 className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wide mb-3">
               Results
             </h3>
             <ScorePanel checks={challenge.checks} elements={domElements} />
@@ -80,7 +83,7 @@ export function ChallengeWorkspace({ challenge, onBack, onScoreUpdate }: Props) 
         </div>
 
         {/* Right: preview */}
-        <div className="flex-1 min-w-0 p-4 flex flex-col border-l border-zinc-800">
+        <div className="flex-1 min-w-0 p-4 flex flex-col border-l border-zinc-200 dark:border-zinc-800">
           <PreviewPane
             htmlValue={htmlValue}
             cssValue={cssValue}
