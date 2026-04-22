@@ -52,16 +52,24 @@ router.post('/question', async (req: Request, res: Response) => {
     return
   }
 
-  // ── Claude path ──────────────────────────────────────────────────────────
+  // ── Claude path (streaming) ──────────────────────────────────────────────
+  // Tokens are streamed directly to the client so the UI can render the
+  // question text as it arrives — feels instant instead of waiting ~4s for
+  // the full JSON. The client parses section markers ([QUESTION], [OPTIONS],
+  // etc.) incrementally. See prepcode/src/lib/quizStream.ts.
   const avoidClause =
     previousQuestions.length > 0
       ? `\n\nDo not repeat any of these questions:\n- ${previousQuestions.join('\n- ')}`
       : ''
 
+  res.setHeader('Content-Type', 'text/event-stream')
+  res.setHeader('Cache-Control', 'no-cache')
+  res.setHeader('Connection', 'keep-alive')
+
   try {
     const anthropic = getAnthropicClient(req.headers['x-api-key'] as string | undefined)
 
-    const message = await anthropic.messages.create({
+    const stream = anthropic.messages.stream({
       model: 'claude-sonnet-4-6',
       max_tokens: 512,
       system: quizQuestionPrompt,
@@ -73,21 +81,31 @@ router.post('/question', async (req: Request, res: Response) => {
       ],
     })
 
-    const raw = message.content[0].type === 'text' ? message.content[0].text : ''
+    for await (const chunk of stream) {
+      if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
+        res.write(chunk.delta.text)
+      }
+    }
+    res.end()
+  } catch (error) {
+    const err = error as { status?: number; message?: string; error?: { error?: { message?: string } } }
+    const status = err.status ?? 500
+    const anthropicMessage = err.error?.error?.message || err.message
+    console.error(`Claude API error (status ${status}):`, anthropicMessage)
 
-    let question
-    try {
-      question = JSON.parse(raw)
-    } catch {
-      console.error('Claude returned invalid JSON:', raw)
-      res.status(500).json({ error: 'Failed to parse question from Claude' })
+    // If we've already started streaming, headers are flushed and we can't
+    // send a JSON error. Just close the stream; the client will fail to parse
+    // and surface a generic error.
+    if (res.headersSent) {
+      res.end()
       return
     }
 
-    res.json(question)
-  } catch (error) {
-    console.error('Claude API error:', error)
-    res.status(500).json({ error: 'Failed to generate question' })
+    if (status === 401) {
+      res.status(401).json({ error: 'Your API key was rejected by Anthropic. Please check it and try again.' })
+      return
+    }
+    res.status(500).json({ error: anthropicMessage || 'Failed to generate question' })
   }
 })
 
@@ -152,6 +170,11 @@ router.post('/evaluate', async (req: Request, res: Response) => {
     res.end()
   } catch (error) {
     console.error('Claude API error:', error)
+    const status = error instanceof Error && 'status' in error ? (error as { status: number }).status : 500
+    if (status === 401) {
+      res.status(401).json({ error: 'Your API key was rejected by Anthropic. Please check it and try again.' })
+      return
+    }
     res.status(500).json({ error: 'Failed to get explanation' })
   }
 })

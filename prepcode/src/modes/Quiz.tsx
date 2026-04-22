@@ -36,6 +36,10 @@ export function Quiz() {
   }, [phase, state.topic, state.difficulty, score, total, saveQuizResult])
 
   const isAnswered = phase === 'loading_explanation' || phase === 'explanation_shown'
+  // While the question is still streaming we show it but block clicks — the
+  // question is only safe to interact with after the full response has arrived
+  // (correctAnswer + options are all set).
+  const isStreaming = phase === 'loading_question' && !!currentQuestion?.question
 
   return (
     <div className="flex flex-col h-full">
@@ -62,7 +66,17 @@ export function Quiz() {
 
         {phase === 'idle' && (
           <>
-            {!hasKey && (
+            {state.error && (
+              <div className="mx-6 mt-6 p-4 bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/30 rounded-xl text-sm">
+                <p className="text-red-900 dark:text-red-200">
+                  {state.error}{' '}
+                  <button onClick={openModal} className="underline hover:text-red-950 dark:hover:text-red-100">
+                    Re-enter API key
+                  </button>
+                </p>
+              </div>
+            )}
+            {!hasKey && !state.error && (
               <div className="mx-6 mt-6 p-4 bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-900/30 rounded-xl text-sm">
                 <p className="text-amber-900 dark:text-amber-200">
                   Using fallback questions — no API key set.{' '}
@@ -77,7 +91,7 @@ export function Quiz() {
           </>
         )}
 
-        {phase === 'loading_question' && (
+        {phase === 'loading_question' && !currentQuestion?.question && (
           <div className="flex flex-col gap-6 p-6 animate-pulse">
             {/* Question text skeleton */}
             <div className="space-y-2">
@@ -98,12 +112,12 @@ export function Quiz() {
           </div>
         )}
 
-        {(phase === 'question_ready' || isAnswered) && currentQuestion && (
+        {(phase === 'question_ready' || isAnswered || isStreaming) && currentQuestion && (
           <>
             <QuizQuestionCard
               question={currentQuestion}
               attempt={currentAttempt}
-              disabled={isAnswered}
+              disabled={isAnswered || isStreaming}
               onAnswer={submitAnswer}
             />
 

@@ -48,6 +48,7 @@ export interface QuizSessionState {
   currentAttempt: QuizAttempt | null
   history: QuizAttempt[]
   phase: QuizPhase
+  error: string | null
 }
 
 // ─── Stats (persisted to localStorage) ──────────────────────────────────────

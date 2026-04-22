@@ -37,16 +37,24 @@ export function ApiKeyGate() {
   if (!isModalOpen) return null
 
   const handleSave = () => {
-    const trimmed = input.trim()
-    if (!trimmed) {
+    // Strip ALL whitespace (not just ends) — users sometimes copy keys with
+    // embedded newlines or trailing URL fragments from docs pages.
+    const cleaned = input.replace(/\s+/g, '')
+    if (!cleaned) {
       setError('Please paste your API key.')
       return
     }
-    if (!trimmed.startsWith('sk-ant-')) {
+    if (!cleaned.startsWith('sk-ant-')) {
       setError('That doesn\'t look like an Anthropic key (should start with sk-ant-).')
       return
     }
-    saveKey(trimmed, persist)
+    // Anthropic API keys are ~108 chars. Anything dramatically longer almost
+    // certainly means extra text got pasted in alongside the key.
+    if (cleaned.length > 120) {
+      setError(`That key is ${cleaned.length} chars — Anthropic keys are around 108. Re-copy just the key, with no surrounding text.`)
+      return
+    }
+    saveKey(cleaned, persist)
   }
 
   return (
